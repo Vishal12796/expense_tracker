@@ -9,10 +9,15 @@ class AppTypography {
     // 🔹 Body
     bodyLarge: TextStyle(
       fontFamily: fontFamily,
-      fontSize: 16,
+      fontSize: 22,
       fontWeight: FontWeight.w400,
     ),
     bodyMedium: TextStyle(
+      fontFamily: fontFamily,
+      fontSize: 18,
+      fontWeight: FontWeight.w400,
+    ),
+    bodySmall: TextStyle(
       fontFamily: fontFamily,
       fontSize: 14,
       fontWeight: FontWeight.w400,
@@ -33,7 +38,23 @@ class AppTypography {
     // 🔹 Headlines
     headlineLarge: TextStyle(
       fontFamily: fontFamily,
-      fontSize: 24,
+      fontSize: 34,
+      fontWeight: FontWeight.w700,
+    ),
+
+    labelLarge: TextStyle(
+      fontFamily: fontFamily,
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+    ),
+    labelMedium: TextStyle(
+      fontFamily: fontFamily,
+      fontSize: 16,
+      fontWeight: FontWeight.w700,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: fontFamily,
+      fontSize: 14,
       fontWeight: FontWeight.w700,
     ),
   );
