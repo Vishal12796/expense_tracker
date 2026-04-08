@@ -1,9 +1,10 @@
-import 'package:expense_tracker/core/extension/padding_extension.dart';
-import 'package:expense_tracker/core/router/routes.dart';
-import 'package:expense_tracker/core/widgets/app_button.dart';
-import 'package:expense_tracker/core/widgets/application_bar.dart';
+import 'package:expense_tracker/views/dashboard/dashboard_screen.dart';
+import 'package:expense_tracker/views/expense/expense_list/expense_list_screen.dart';
+import 'package:expense_tracker/views/investment/expense_list/trades_list_screen.dart';
+import 'package:expense_tracker/views/profile/profile_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import '../../../../core/extension/context_extension.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,24 +14,48 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int currentIndex = 0;
+
+  final List<Widget> screens = const [
+    DashboardScreen(),
+    TradesListScreen(),
+    ExpenseListScreen(),
+    ProfileScreen(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: ApplicationBar(title: "Home"),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 12),
-          AppButton(
-            title: "Expense List",
-            onTap: () {
-              context.push(AppRoutes.expense_list);
-            },
+      body: screens[currentIndex],
+
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+        selectedItemColor: context.color.primary,
+        unselectedItemColor: context.color.onPrimaryFixed,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: "Dashboard",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.candlestick_chart),
+            label: "Trades",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet_outlined),
+            label: "Expense",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(CupertinoIcons.profile_circled),
+            label: "Profile",
           ),
         ],
-      ).screenPadding(),
+      ),
     );
   }
 }

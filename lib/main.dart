@@ -1,6 +1,5 @@
 import 'package:expense_tracker/core/router/app_router.dart';
 import 'package:expense_tracker/core/theme/app_typography.dart';
-import 'package:expense_tracker/views/home/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

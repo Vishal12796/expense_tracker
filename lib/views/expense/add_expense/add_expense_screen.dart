@@ -1,4 +1,3 @@
-import 'package:expense_tracker/core/constants/app_constants.dart';
 import 'package:expense_tracker/core/enum/expense_category.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/widgets/app_button.dart';

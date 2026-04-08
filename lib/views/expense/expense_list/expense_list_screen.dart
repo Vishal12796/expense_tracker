@@ -129,10 +129,10 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: ApplicationBar(title: "Monthly Expenses", isShowBack: true),
+        child: ApplicationBar(title: "Monthly Expenses"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {context.push(AppRoutes.add_expense)},
+        onPressed: () => {context.push(AppRoutes.addExpense)},
         child: Icon(Icons.add),
       ),
       body: Column(

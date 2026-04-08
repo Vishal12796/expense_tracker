@@ -16,7 +16,7 @@ class ExpenseListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.push(AppRoutes.add_expense, extra: modelData);
+        context.push(AppRoutes.addExpense, extra: modelData);
       },
       child: Card.filled(
         color: Colors.white,
