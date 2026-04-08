@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../extension/context_extension.dart';
-
 class AppMonthYearField extends StatefulWidget {
   final String hint;
   final ValueChanged<DateTime>? onChanged;
@@ -19,39 +17,36 @@ class AppMonthYearField extends StatefulWidget {
 
 class _AppMonthYearFieldState extends State<AppMonthYearField> {
   DateTime? selected;
+  final TextEditingController? controller = TextEditingController();
+
+  Future<void> onTap() async {
+    final picked = await AppMonthYearPicker.pick(
+      context,
+      initialDate: selected,
+    );
+
+    if (picked != null) {
+      setState(() {
+        selected = picked;
+        controller?.text = selected != null
+            ? DateFormat('MMM yyyy').format(selected!)
+            : widget.hint;
+      });
+      widget.onChanged?.call(picked);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () async {
-        final picked = await AppMonthYearPicker.pick(
-          context,
-          initialDate: selected,
-        );
-
-        if (picked != null) {
-          setState(() => selected = picked);
-          widget.onChanged?.call(picked);
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.grey),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          spacing: 12,
-          children: [
-            const Icon(Icons.calendar_month_outlined, size: 24),
-            Text(
-              selected != null
-                  ? DateFormat('MMM yyyy').format(selected!)
-                  : widget.hint,
-              style: context.text.bodyMedium,
-            ),
-          ],
-        ),
+    return TextFormField(
+      controller: controller,
+      readOnly: true,
+      onTap: onTap,
+      decoration: InputDecoration(
+        hintText: widget.hint,
+        labelText: widget.hint,
+        prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
   }
@@ -98,7 +93,7 @@ class _MonthYearPickerDialogState extends State<_MonthYearPickerDialog> {
   void initState() {
     super.initState();
 
-    // ✅ restore previous selection
+    // restore previous selection
     selectedYear = widget.initialDate.year;
     selectedMonth = widget.initialDate.month;
   }
@@ -118,7 +113,7 @@ class _MonthYearPickerDialogState extends State<_MonthYearPickerDialog> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // 🔹 Year selector
+          // Year selector
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -136,7 +131,7 @@ class _MonthYearPickerDialogState extends State<_MonthYearPickerDialog> {
 
           const SizedBox(height: 10),
 
-          // 🔹 Month grid (Wrap 🔥)
+          // Month grid
           Wrap(
             spacing: 10,
             runSpacing: 10,
