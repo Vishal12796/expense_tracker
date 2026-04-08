@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -44,9 +45,11 @@ class AppDateField extends StatelessWidget {
       controller: controller,
       readOnly: true,
       onTap: () => _selectDate(context),
+      style: AppTextStyles.textField,
       decoration: InputDecoration(
         hintText: hintText ?? "Select date",
         labelText: labelText,
+        hintStyle:  AppTextStyles.textField,
         prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24,),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),

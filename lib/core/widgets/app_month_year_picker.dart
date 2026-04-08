@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -42,9 +43,11 @@ class _AppMonthYearFieldState extends State<AppMonthYearField> {
       controller: controller,
       readOnly: true,
       onTap: onTap,
+      style: AppTextStyles.textField,
       decoration: InputDecoration(
         hintText: widget.hint,
         labelText: widget.hint,
+        hintStyle:  AppTextStyles.textField,
         prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),

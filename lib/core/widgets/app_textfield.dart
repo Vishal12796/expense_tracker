@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class AppTextField extends StatelessWidget {
@@ -39,11 +40,13 @@ class AppTextField extends StatelessWidget {
       onChanged: onChanged,
       validator: validator,
       maxLines: lines,
+      style: AppTextStyles.textField,
 
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
         prefixIcon: prefixIcon,
+        hintStyle:  AppTextStyles.textField,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );

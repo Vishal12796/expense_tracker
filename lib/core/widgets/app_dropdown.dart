@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -51,10 +52,9 @@ class _AppDropdownFieldState extends State<AppDropdownField> {
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
 
-      hint: Text(
-        widget.hintText,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      hint: Text(widget.hintText, style: AppTextStyles.textField),
+
+      // style: AppTextStyles.textField,
 
       items: widget.items.map((item) {
         return DropdownItem<String>(value: item, child: Text(item));
