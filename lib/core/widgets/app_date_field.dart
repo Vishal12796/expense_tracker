@@ -47,7 +47,7 @@ class AppDateField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText ?? "Select date",
         labelText: labelText,
-        suffixIcon: const Icon(Icons.calendar_month_outlined),
+        prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24,),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );

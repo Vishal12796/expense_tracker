@@ -11,6 +11,7 @@ class AppTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final bool readOnly;
   final int lines;
+  final Widget? prefixIcon;
 
   const AppTextField({
     super.key,
@@ -24,6 +25,7 @@ class AppTextField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.readOnly = false,
+    this.prefixIcon,
   });
 
   @override
@@ -41,6 +43,7 @@ class AppTextField extends StatelessWidget {
       decoration: InputDecoration(
         hintText: hintText,
         labelText: labelText,
+        prefixIcon: prefixIcon,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );

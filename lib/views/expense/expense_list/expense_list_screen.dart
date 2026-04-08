@@ -1,3 +1,4 @@
+import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/enum/expense_category.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
@@ -95,12 +96,40 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
     ),
   ];
 
+  Widget header() {
+    return Row(
+      spacing: 24,
+      children: [
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: AppMonthYearField(
+            onChanged: (value) {
+              print(value);
+            },
+          ),
+        ),
+        Row(
+          children: [
+            Icon(Icons.currency_rupee, size: 30, color: context.color.primary),
+            Text(
+              "1800",
+              style: context.text.headlineLarge?.copyWith(
+                color: context.color.primary,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: ApplicationBar(title: "Expenses", isShowBack: true),
+        child: ApplicationBar(title: "Monthly Expenses", isShowBack: true),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => {context.push(AppRoutes.add_expense)},
@@ -110,26 +139,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
         spacing: 12,
         children: [
           const SizedBox(height: 8),
-          Row(
-            spacing: 24,
-            children: [
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: AppMonthYearField(
-                  onChanged: (value) {
-                    print(value);
-                  },
-                ),
-              ),
-              Text(
-                "1800",
-                style: context.text.headlineLarge?.copyWith(
-                  color: context.color.primary,
-                ),
-              ),
-            ],
-          ),
+          header(),
           Flexible(
             flex: 1,
             child: ListView.separated(
@@ -139,7 +149,36 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
               },
               itemBuilder: (context, index) {
                 ExpenseModel model = dummyExpenses[index];
-                return ExpenseListItem(modelData: model);
+                return Dismissible(
+                  key: Key(model.id),
+                  direction: DismissDirection.endToStart,
+                  confirmDismiss: (direction) async {
+                    return await CommonDialog.showConfirmDialog(
+                      context: context,
+                      title: "Delete Expense",
+                      message: "Are you sure you want to delete this expense?",
+                      confirmText: "Delete",
+                    );
+                  },
+                  background: Card.filled(
+                    elevation: 2,
+                    child: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Colors.red,
+                      ),
+                      child: const Icon(Icons.delete, color: Colors.white),
+                    ),
+                  ),
+                  onDismissed: (direction) {
+                    setState(() {
+                      dummyExpenses.removeAt(index);
+                    });
+                  },
+                  child: ExpenseListItem(modelData: model),
+                );
               },
             ),
           ),

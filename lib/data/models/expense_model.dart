@@ -19,7 +19,6 @@ class ExpenseModel {
     required this.category,
   });
 
-  /// 🔁 CopyWith (very important)
   ExpenseModel copyWith({
     double? amount,
     DateTime? date,
@@ -38,7 +37,6 @@ class ExpenseModel {
     );
   }
 
-  /// 📦 Convert to Map
   Map<String, dynamic> toMap() {
     return {
       'amount': amount,
@@ -50,7 +48,6 @@ class ExpenseModel {
     };
   }
 
-  /// 📥 From Map
   factory ExpenseModel.fromMap(Map<String, dynamic> map) {
     return ExpenseModel(
       amount: (map['amount'] ?? 0).toDouble(),
@@ -62,13 +59,11 @@ class ExpenseModel {
     );
   }
 
-  /// 🔄 JSON helpers
   String toJson() => json.encode(toMap());
 
   factory ExpenseModel.fromJson(String source) =>
       ExpenseModel.fromMap(json.decode(source));
 
-  /// 🧠 Equality (very useful)
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

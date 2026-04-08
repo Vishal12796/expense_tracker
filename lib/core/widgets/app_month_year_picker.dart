@@ -40,11 +40,17 @@ class _AppMonthYearFieldState extends State<AppMonthYearField> {
           border: Border.all(width: 1, color: Colors.grey),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Text(
-          selected != null
-              ? DateFormat('MMM yyyy').format(selected!)
-              : widget.hint,
-          style: context.text.bodyMedium,
+        child: Row(
+          spacing: 12,
+          children: [
+            const Icon(Icons.calendar_month_outlined, size: 24),
+            Text(
+              selected != null
+                  ? DateFormat('MMM yyyy').format(selected!)
+                  : widget.hint,
+              style: context.text.bodyMedium,
+            ),
+          ],
         ),
       ),
     );
