@@ -29,6 +29,9 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
   @override
   void dispose() {
     nameController.dispose();
+    amountController.dispose();
+    notesController.dispose();
+    dateController.dispose();
     super.dispose();
   }
 
@@ -53,12 +56,13 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                     controller: nameController,
                     hintText: "Expense Name",
                     labelText: "Name",
-                    prefixIcon: Icon(CupertinoIcons.profile_circled, size: 24),
+                    prefixIcon: Icon(Icons.wallet_outlined, size: 24),
                   ),
                   AppTextField(
                     controller: amountController,
                     hintText: "100",
                     labelText: "Amount",
+                    keyboardType: TextInputType.number,
                     prefixIcon: Icon(Icons.currency_rupee, size: 24),
                   ),
                   AppDropdownField(
