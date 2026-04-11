@@ -7,9 +7,9 @@ class AppTypography {
 
   static const TextTheme textTheme = TextTheme(
     // 🔹 Body
-    bodyLarge: TextStyle(
+    bodyLarge: TextStyle( // Text Field Default Style
       fontFamily: fontFamily,
-      fontSize: 22,
+      fontSize: 18,
       fontWeight: FontWeight.w400,
     ),
     bodyMedium: TextStyle(
@@ -38,7 +38,7 @@ class AppTypography {
     // 🔹 Headlines
     headlineLarge: TextStyle(
       fontFamily: fontFamily,
-      fontSize: 34,
+      fontSize: 32,
       fontWeight: FontWeight.w700,
     ),
 

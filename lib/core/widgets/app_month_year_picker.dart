@@ -1,14 +1,48 @@
-import 'package:expense_tracker/core/utils/app_text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../extension/context_extension.dart';
+
+enum MonthFiledVariant { big, small }
+
+extension MonthFiledVariantX on MonthFiledVariant {
+  double get fontSize {
+    switch (this) {
+      case MonthFiledVariant.big:
+        return 18;
+      case MonthFiledVariant.small:
+        return 12;
+    }
+  }
+
+  double get iconSize {
+    switch (this) {
+      case MonthFiledVariant.big:
+        return 24;
+      case MonthFiledVariant.small:
+        return 14;
+    }
+  }
+
+  double get padding {
+    switch (this) {
+      case MonthFiledVariant.big:
+        return 12;
+      case MonthFiledVariant.small:
+        return 8;
+    }
+  }
+}
+
 class AppMonthYearField extends StatefulWidget {
   final String hint;
+  final MonthFiledVariant variant;
   final ValueChanged<DateTime>? onChanged;
 
   const AppMonthYearField({
     super.key,
     this.hint = "Select Month",
+    this.variant = MonthFiledVariant.big,
     this.onChanged,
   });
 
@@ -18,7 +52,7 @@ class AppMonthYearField extends StatefulWidget {
 
 class _AppMonthYearFieldState extends State<AppMonthYearField> {
   DateTime? selected;
-  final TextEditingController? controller = TextEditingController();
+  String selectedMonth = "";
 
   Future<void> onTap() async {
     final picked = await AppMonthYearPicker.pick(
@@ -29,7 +63,7 @@ class _AppMonthYearFieldState extends State<AppMonthYearField> {
     if (picked != null) {
       setState(() {
         selected = picked;
-        controller?.text = selected != null
+        selectedMonth = selected != null
             ? DateFormat('MMM yyyy').format(selected!)
             : widget.hint;
       });
@@ -39,17 +73,37 @@ class _AppMonthYearFieldState extends State<AppMonthYearField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      readOnly: true,
+    return GestureDetector(
       onTap: onTap,
-      style: AppTextStyles.textField,
-      decoration: InputDecoration(
-        hintText: widget.hint,
-        labelText: widget.hint,
-        hintStyle:  AppTextStyles.textField,
-        prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: widget.variant.padding + 4,
+          vertical: widget.variant.padding,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(30),
+          border: Border.all(width: 0.5, color: Colors.grey.shade600),
+        ),
+        child: Row(
+          spacing: 8,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.calendar_month_outlined,
+              size: widget.variant.iconSize,
+              color: context.color.onPrimaryFixedVariant,
+            ),
+            Text(
+              selectedMonth.trim().isNotEmpty ? selectedMonth : widget.hint,
+              style: context.text.labelLarge?.copyWith(
+                color: context.color.onPrimaryFixedVariant,
+                fontWeight: FontWeight.w600,
+                fontSize: widget.variant.fontSize,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

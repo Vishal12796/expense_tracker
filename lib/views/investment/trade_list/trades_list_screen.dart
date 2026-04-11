@@ -1,9 +1,10 @@
 import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
+import 'package:expense_tracker/core/theme/spacing.dart';
 import 'package:expense_tracker/core/widgets/app_month_year_picker.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
-import 'package:expense_tracker/views/investment/expense_list/widgets/trade_list_item.dart';
+import 'package:expense_tracker/views/investment/trade_list/widgets/trade_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/extension/context_extension.dart';
@@ -18,16 +19,14 @@ class TradesListScreen extends StatefulWidget {
 class _TradesListScreenState extends State<TradesListScreen> {
   Widget header() {
     return Row(
-      spacing: 24,
+      spacing: Spacing.sectionSpace,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Flexible(
-          flex: 1,
-          fit: FlexFit.tight,
-          child: AppMonthYearField(
-            onChanged: (value) {
-              print(value);
-            },
-          ),
+        AppMonthYearField(
+          onChanged: (value) {
+            print(value);
+          },
+          variant: MonthFiledVariant.big,
         ),
         Row(
           children: [

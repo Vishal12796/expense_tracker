@@ -1,6 +1,6 @@
 import 'package:expense_tracker/views/dashboard/dashboard_screen.dart';
 import 'package:expense_tracker/views/expense/expense_list/expense_list_screen.dart';
-import 'package:expense_tracker/views/investment/expense_list/trades_list_screen.dart';
+import 'package:expense_tracker/views/investment/trade_list/trades_list_screen.dart';
 import 'package:expense_tracker/views/profile/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

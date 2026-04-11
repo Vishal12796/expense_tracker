@@ -39,7 +39,7 @@ class ApplicationBar extends StatelessWidget {
             child: Center(
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
