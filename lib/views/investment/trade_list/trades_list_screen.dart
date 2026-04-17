@@ -17,7 +17,11 @@ class TradesListScreen extends StatefulWidget {
   State<TradesListScreen> createState() => _TradesListScreenState();
 }
 
-class _TradesListScreenState extends State<TradesListScreen> {
+class _TradesListScreenState extends State<TradesListScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   Widget header() {
     return Row(
       spacing: Spacing.sectionSpace,
@@ -39,6 +43,8 @@ class _TradesListScreenState extends State<TradesListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),

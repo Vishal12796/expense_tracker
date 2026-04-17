@@ -19,9 +19,12 @@ class ExpenseListScreen extends StatefulWidget {
   State<ExpenseListScreen> createState() => _ExpenseListScreenState();
 }
 
-class _ExpenseListScreenState extends State<ExpenseListScreen> {
+class _ExpenseListScreenState extends State<ExpenseListScreen>  with AutomaticKeepAliveClientMixin {
   DateTime selectedDate = DateTime.now();
   final monthNotifier = ValueNotifier(DateTime.now());
+
+  @override
+  bool get wantKeepAlive => true;
 
   final List<ExpenseModel> dummyExpenses = [
     ExpenseModel(
@@ -121,6 +124,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
