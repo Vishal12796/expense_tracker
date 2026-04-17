@@ -1,4 +1,7 @@
+import 'package:expense_tracker/core/dialog/common_dialog.dart';
+import 'package:expense_tracker/core/router/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../core/extension/context_extension.dart';
 
@@ -13,6 +16,20 @@ class _ProfileScreenState extends State<ProfileScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  void handleLogout() async {
+    final result = await CommonDialog.showConfirmDialog(
+      context: context,
+      title: "Logout",
+      message: "Are you sure you want to logout?",
+      confirmText: "Yes",
+      cancelText: "No",
+    );
+
+    if (result) {
+      context.pushReplacement(AppRoutes.login);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   _buildTile(
                     icon: Icons.power_settings_new_outlined,
                     title: 'Logout',
-                    onTap: () {},
+                    onTap: handleLogout,
                   ),
                 ],
               ),
