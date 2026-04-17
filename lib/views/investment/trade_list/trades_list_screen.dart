@@ -2,6 +2,7 @@ import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
 import 'package:expense_tracker/core/theme/spacing.dart';
+import 'package:expense_tracker/core/utils/utils.dart';
 import 'package:expense_tracker/core/widgets/app_month_year_picker.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:expense_tracker/views/investment/trade_list/widgets/trade_list_item.dart';
@@ -28,16 +29,9 @@ class _TradesListScreenState extends State<TradesListScreen> {
           },
           variant: MonthFiledVariant.big,
         ),
-        Row(
-          children: [
-            Icon(Icons.currency_rupee, size: 30, color: Colors.green),
-            Text(
-              "1800",
-              style: context.text.headlineLarge?.copyWith(
-                color:  Colors.green
-              ),
-            ),
-          ],
+        Text(
+          "${Utils.moneySymbol}1800",
+          style: context.text.headlineLarge?.copyWith(color: Colors.green),
         ),
       ],
     );
@@ -51,9 +45,7 @@ class _TradesListScreenState extends State<TradesListScreen> {
         child: ApplicationBar(title: "Monthly Trades"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          context.push(AppRoutes.addTrade)
-        },
+        onPressed: () => {context.push(AppRoutes.addTrade)},
         child: Icon(Icons.add),
       ),
       body: Column(

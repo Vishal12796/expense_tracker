@@ -3,6 +3,7 @@ import 'package:expense_tracker/core/enum/expense_category.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
 import 'package:expense_tracker/core/theme/spacing.dart';
+import 'package:expense_tracker/core/utils/utils.dart';
 import 'package:expense_tracker/core/widgets/app_month_year_picker.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:expense_tracker/data/models/expense_model.dart';
@@ -108,16 +109,11 @@ class _ExpenseListScreenState extends State<ExpenseListScreen> {
           },
           variant: MonthFiledVariant.big,
         ),
-        Row(
-          children: [
-            Icon(Icons.currency_rupee, size: 30, color: context.color.primary),
-            Text(
-              "1800",
-              style: context.text.headlineLarge?.copyWith(
-                color: context.color.primary,
-              ),
-            ),
-          ],
+        Text(
+          "${Utils.moneySymbol}1800",
+          style: context.text.headlineLarge?.copyWith(
+            color: context.color.primary,
+          ),
         ),
       ],
     );

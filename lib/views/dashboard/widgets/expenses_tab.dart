@@ -8,10 +8,12 @@ class ExpensesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      spacing: Spacing.sectionSpace,
-      children: [MonthlyExpenses(), ExpensesCategories()],
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: Spacing.sectionSpace,
+        children: [MonthlyExpenses(), ExpensesCategories()],
+      ),
     );
   }
 }
