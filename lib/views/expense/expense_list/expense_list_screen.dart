@@ -9,6 +9,7 @@ import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:expense_tracker/data/models/expense_model.dart';
 import 'package:expense_tracker/views/expense/expense_list/widgets/expense_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/extension/context_extension.dart';
 
@@ -19,7 +20,8 @@ class ExpenseListScreen extends StatefulWidget {
   State<ExpenseListScreen> createState() => _ExpenseListScreenState();
 }
 
-class _ExpenseListScreenState extends State<ExpenseListScreen>  with AutomaticKeepAliveClientMixin {
+class _ExpenseListScreenState extends State<ExpenseListScreen>
+    with AutomaticKeepAliveClientMixin {
   DateTime selectedDate = DateTime.now();
   final monthNotifier = ValueNotifier(DateTime.now());
 
@@ -131,7 +133,8 @@ class _ExpenseListScreenState extends State<ExpenseListScreen>  with AutomaticKe
         child: ApplicationBar(title: "Monthly Expenses"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {context.push(AppRoutes.addExpense)},
+        heroTag: 'add_expense_fab',
+        onPressed: () => {Get.toNamed(AppRoutes.addExpense)},
         child: Icon(Icons.add),
       ),
       body: Column(

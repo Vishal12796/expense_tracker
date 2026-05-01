@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 class ApplicationBar extends StatelessWidget {
@@ -24,7 +25,7 @@ class ApplicationBar extends StatelessWidget {
             child: Container(
               child: isShowBack
                   ? GestureDetector(
-                      onTap: () => context.pop(),
+                      onTap: () => Get.back(),
                       child: Icon(
                         Icons.chevron_left_rounded,
                         size: 30,

@@ -1,6 +1,8 @@
+import 'package:expense_tracker/bindings/login_binding.dart';
 import 'package:expense_tracker/core/router/app_router.dart';
 import 'package:expense_tracker/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -20,7 +22,9 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Lato',
         textTheme: AppTypography.textTheme,
       ),
-      routerConfig: AppRouter.router,
+      initialRoute: AppRouter.initialLocation,
+      initialBinding: LoginBinding(),
+      getPages: AppRouter.routes,
       // home: HomeScreen(),
     );
   }

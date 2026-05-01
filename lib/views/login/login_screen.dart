@@ -1,13 +1,17 @@
+import 'package:expense_tracker/controller/login_controller.dart';
 import 'package:expense_tracker/core/resources/app_icons.dart';
 import 'package:expense_tracker/core/router/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/extension/context_extension.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  final LoginController controller = Get.find();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class LoginScreen extends StatelessWidget {
 
               _GoogleSignInButton(
                 onTap: () {
-                  context.pushReplacement(AppRoutes.home);
+                  Get.toNamed(AppRoutes.home);
                 },
               ),
             ],

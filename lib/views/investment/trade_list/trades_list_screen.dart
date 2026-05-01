@@ -7,6 +7,7 @@ import 'package:expense_tracker/core/widgets/app_month_year_picker.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:expense_tracker/views/investment/trade_list/widgets/trade_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/extension/context_extension.dart';
 
@@ -51,7 +52,8 @@ class _TradesListScreenState extends State<TradesListScreen>
         child: ApplicationBar(title: "Monthly Trades"),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {context.push(AppRoutes.addTrade)},
+        heroTag: 'add_trade_fab',
+        onPressed: () => {Get.toNamed(AppRoutes.addTrade)},
         child: Icon(Icons.add),
       ),
       body: Column(
