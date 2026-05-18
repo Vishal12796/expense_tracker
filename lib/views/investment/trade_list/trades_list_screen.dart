@@ -1,3 +1,4 @@
+import 'package:expense_tracker/views/investment/trade_list/controller/trade_list_controller.dart';
 import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
@@ -8,7 +9,6 @@ import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:expense_tracker/views/investment/trade_list/widgets/trade_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import '../../../../core/extension/context_extension.dart';
 
 class TradesListScreen extends StatefulWidget {
@@ -20,6 +20,8 @@ class TradesListScreen extends StatefulWidget {
 
 class _TradesListScreenState extends State<TradesListScreen>
     with AutomaticKeepAliveClientMixin {
+  final TradeListController controller = Get.find();
+
   @override
   bool get wantKeepAlive => true;
 
@@ -30,13 +32,17 @@ class _TradesListScreenState extends State<TradesListScreen>
       children: [
         AppMonthYearField(
           onChanged: (value) {
-            print(value);
+            controller.updateSelectedMonth(value);
           },
           variant: MonthFiledVariant.big,
         ),
-        Text(
-          "${Utils.moneySymbol}1800",
-          style: context.text.headlineLarge?.copyWith(color: Colors.green),
+        Obx(
+          () => Text(
+            "${Utils.moneySymbol}${controller.monthlyTotalText}",
+            style: context.text.headlineLarge?.copyWith(
+              color: controller.monthlyTotal >= 0 ? Colors.green : Colors.red,
+            ),
+          ),
         ),
       ],
     );
@@ -63,41 +69,64 @@ class _TradesListScreenState extends State<TradesListScreen>
           header(),
           Flexible(
             flex: 1,
-            child: ListView.separated(
-              itemCount: 10,
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 4);
-              },
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: Key("${index}"),
-                  // to do change id
-                  direction: DismissDirection.endToStart,
-                  confirmDismiss: (direction) async {
-                    return await CommonDialog.showConfirmDialog(
-                      context: context,
-                      title: "Delete Trade",
-                      message: "Are you sure you want to delete this trade?",
-                      confirmText: "Delete",
-                    );
-                  },
-                  background: Card.filled(
-                    elevation: 2,
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: Colors.red,
-                      ),
-                      child: const Icon(Icons.delete, color: Colors.white),
+            child: Obx(() {
+              final trades = controller.monthlyTrades;
+
+              if (trades.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No trades found",
+                    style: context.text.titleMedium?.copyWith(
+                      color: context.color.secondary,
                     ),
                   ),
-                  onDismissed: (direction) {},
-                  child: TradeListItem(index: index),
                 );
-              },
-            ),
+              }
+
+              return ListView.separated(
+                itemCount: trades.length,
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 4);
+                },
+                itemBuilder: (context, index) {
+                  final trade = trades[index];
+
+                  return Dismissible(
+                    key: Key(trade.id),
+                    direction: DismissDirection.endToStart,
+                    confirmDismiss: (direction) async {
+                      return await CommonDialog.showConfirmDialog(
+                        context: context,
+                        title: "Delete Trade",
+                        message: "Are you sure you want to delete this trade?",
+                        confirmText: "Delete",
+                      );
+                    },
+                    background: Card.filled(
+                      elevation: 2,
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Colors.red,
+                        ),
+                        child: const Icon(Icons.delete, color: Colors.white),
+                      ),
+                    ),
+                    onDismissed: (direction) {
+                      controller.deleteTrade(trade.id);
+                    },
+                    child: TradeListItem(
+                      trade: trade,
+                      onTap: () {
+                        Get.toNamed(AppRoutes.addTrade, arguments: trade);
+                      },
+                    ),
+                  );
+                },
+              );
+            }),
           ),
         ],
       ).screenPadding(),

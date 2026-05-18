@@ -1,17 +1,20 @@
+import 'package:expense_tracker/data/models/trade_list_model.dart';
+import 'package:expense_tracker/core/utils/date_format.dart';
 import 'package:flutter/material.dart';
 import '../../../../core/extension/context_extension.dart';
 
 class TradeListItem extends StatelessWidget {
-  final int index;
+  final TradeListModel trade;
+  final VoidCallback? onTap;
 
-  const TradeListItem({super.key, required this.index});
+  const TradeListItem({super.key, required this.trade, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    Color color = index % 2 == 0 ? Colors.green : Colors.red;
+    final color = trade.isProfit ? Colors.green : Colors.red;
 
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Card.filled(
         color: Colors.white,
         elevation: 1,
@@ -32,7 +35,7 @@ class TradeListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "08 Apr",
+                      formatDate(trade.date),
                       style: context.text.labelMedium?.copyWith(
                         color: context.color.onPrimaryFixed,
                       ),
@@ -40,7 +43,7 @@ class TradeListItem extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      "market moment high",
+                      trade.notes,
                       style: context.text.labelSmall?.copyWith(
                         color: context.color.secondary,
                       ),
@@ -55,7 +58,7 @@ class TradeListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    index % 2 == 0 ? "+200" : "-100",
+                    trade.amountText,
                     style: context.text.titleLarge?.copyWith(color: color),
                   ),
                 ],

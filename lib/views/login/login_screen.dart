@@ -1,4 +1,4 @@
-import 'package:expense_tracker/controller/login_controller.dart';
+import 'package:expense_tracker/views/login/controller/login_controller.dart';
 import 'package:expense_tracker/core/resources/app_icons.dart';
 import 'package:expense_tracker/core/router/routes.dart';
 import 'package:flutter/material.dart';

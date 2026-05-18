@@ -1,4 +1,4 @@
-import 'package:expense_tracker/bindings/login_binding.dart';
+import 'package:expense_tracker/views/login/binding/login_binding.dart';
 import 'package:expense_tracker/core/router/app_router.dart';
 import 'package:expense_tracker/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';

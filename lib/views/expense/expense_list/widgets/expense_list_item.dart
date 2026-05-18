@@ -1,23 +1,20 @@
-import 'package:expense_tracker/core/router/routes.dart';
 import 'package:expense_tracker/core/utils/date_format.dart';
 import 'package:expense_tracker/core/widgets/category_avatar.dart';
 import 'package:expense_tracker/data/models/expense_model.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../../core/extension/context_extension.dart';
 
 class ExpenseListItem extends StatelessWidget {
   final ExpenseModel modelData;
+  final VoidCallback? onTap;
 
-  const ExpenseListItem({super.key, required this.modelData});
+  const ExpenseListItem({super.key, required this.modelData, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.push(AppRoutes.addExpense, extra: modelData);
-      },
+      onTap: onTap,
       child: Card.filled(
         color: Colors.white,
         elevation: 1,

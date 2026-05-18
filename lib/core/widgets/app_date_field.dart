@@ -9,6 +9,7 @@ class AppDateField extends StatelessWidget {
   final DateTime? firstDate;
   final DateTime? lastDate;
   final ValueChanged<DateTime>? onDateSelected;
+  final String? Function(String?)? validator;
 
   const AppDateField({
     super.key,
@@ -18,6 +19,7 @@ class AppDateField extends StatelessWidget {
     this.firstDate,
     this.lastDate,
     this.onDateSelected,
+    this.validator,
   });
 
   Future<void> _selectDate(BuildContext context) async {
@@ -45,12 +47,13 @@ class AppDateField extends StatelessWidget {
       controller: controller,
       readOnly: true,
       onTap: () => _selectDate(context),
+      validator: validator,
       style: AppTextStyles.textField,
       decoration: InputDecoration(
         hintText: hintText ?? "Select date",
         labelText: labelText,
-        hintStyle:  AppTextStyles.textField,
-        prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24,),
+        hintStyle: AppTextStyles.textField,
+        prefixIcon: const Icon(Icons.calendar_month_outlined, size: 24),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       ),
     );
