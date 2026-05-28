@@ -1,15 +1,11 @@
 import 'package:expense_tracker/core/extension/context_extension.dart';
 import 'package:flutter/material.dart';
 
-class AddExpenseFormGroup extends StatelessWidget {
+class AppFormGroup extends StatelessWidget {
   final String title;
   final List<Widget> children;
 
-  const AddExpenseFormGroup({
-    super.key,
-    required this.title,
-    required this.children,
-  });
+  const AppFormGroup({super.key, required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {

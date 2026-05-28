@@ -3,10 +3,10 @@ import 'package:expense_tracker/core/enum/expense_category.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/widgets/app_date_field.dart';
 import 'package:expense_tracker/core/widgets/app_dropdown.dart';
+import 'package:expense_tracker/core/widgets/app_form_group.dart';
+import 'package:expense_tracker/core/widgets/app_submit_bar.dart';
 import 'package:expense_tracker/core/widgets/app_textfield.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
-import 'package:expense_tracker/views/expense/add_expense/widgets/add_expense_form_group.dart';
-import 'package:expense_tracker/views/expense/add_expense/widgets/add_expense_submit_bar.dart';
 import 'package:expense_tracker/views/expense/add_expense/widgets/expense_summary_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,7 +42,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                   spacing: 18,
                   children: [
                     ExpenseSummaryHeader(controller: controller),
-                    AddExpenseFormGroup(
+                    AppFormGroup(
                       title: "Expense Details",
                       children: [
                         AppTextField(
@@ -68,7 +68,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                       ],
                     ),
-                    AddExpenseFormGroup(
+                    AppFormGroup(
                       title: "Classification",
                       children: [
                         AppDropdownField(
@@ -88,7 +88,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
                         ),
                       ],
                     ),
-                    AddExpenseFormGroup(
+                    AppFormGroup(
                       title: "Notes",
                       children: [
                         AppTextField(
@@ -106,7 +106,7 @@ class _AddExpenseScreenState extends State<AddExpenseScreen> {
               ),
             ).scrollPadding(),
           ),
-          AddExpenseSubmitBar(
+          AppSubmitBar(
             title: controller.isEditing ? "Update Expense" : "Save Expense",
             onTap: controller.submit,
           ),

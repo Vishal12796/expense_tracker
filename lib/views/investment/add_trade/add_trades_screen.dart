@@ -1,14 +1,14 @@
 import 'package:expense_tracker/views/investment/add_trade/controller/add_trade_controller.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
-import 'package:expense_tracker/core/widgets/app_button.dart';
 import 'package:expense_tracker/core/widgets/app_date_field.dart';
-import 'package:expense_tracker/core/widgets/app_radio.dart';
+import 'package:expense_tracker/core/widgets/app_form_group.dart';
+import 'package:expense_tracker/core/widgets/app_submit_bar.dart';
 import 'package:expense_tracker/core/widgets/app_textfield.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
+import 'package:expense_tracker/views/investment/add_trade/widgets/trade_result_selector.dart';
+import 'package:expense_tracker/views/investment/add_trade/widgets/trade_summary_header.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../core/utils/app_text_styles.dart';
 
 class AddTradesScreen extends StatefulWidget {
   const AddTradesScreen({super.key});
@@ -37,58 +37,58 @@ class _AddTradesScreenState extends State<AddTradesScreen> {
               child: Form(
                 key: controller.formKey,
                 child: Column(
-                  spacing: 24,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 18,
                   children: [
-                    Obx(
-                      () => AppRadioGroup<TradeResult>(
-                        title: const Text(
-                          "Trade  Result",
-                          style: AppTextStyles.textField,
-                        ),
-                        value: controller.tradeResult.value,
-                        direction: Axis.horizontal,
-                        onChanged: controller.updateTradeResult,
-                        items: const [
-                          AppRadioItem(
-                            value: TradeResult.profit,
-                            title: "Profit",
+                    TradeSummaryHeader(controller: controller),
+                    AppFormGroup(
+                      title: "Trade Result",
+                      children: [TradeResultSelector(controller: controller)],
+                    ),
+                    AppFormGroup(
+                      title: "Trade Details",
+                      children: [
+                        AppTextField(
+                          controller: controller.amountController,
+                          hintText: "100",
+                          labelText: "Amount",
+                          keyboardType: TextInputType.number,
+                          validator: controller.validateAmount,
+                          prefixIcon: const Icon(
+                            Icons.currency_rupee,
+                            size: 22,
                           ),
-                          AppRadioItem(value: TradeResult.loss, title: "Loss"),
-                        ],
-                      ),
+                        ),
+                        AppDateField(
+                          controller: controller.dateController,
+                          labelText: "Select Date",
+                          lastDate: DateTime.now(),
+                          validator: controller.validateDate,
+                          onDateSelected: controller.updateSelectedDate,
+                        ),
+                      ],
                     ),
-                    AppTextField(
-                      controller: controller.amountController,
-                      hintText: "100",
-                      labelText: "Amount",
-                      keyboardType: TextInputType.number,
-                      validator: controller.validateAmount,
-                      prefixIcon: Icon(Icons.currency_rupee, size: 24),
-                    ),
-                    AppDateField(
-                      controller: controller.dateController,
-                      labelText: "Select Date",
-                      lastDate: DateTime.now(),
-                      validator: controller.validateDate,
-                      onDateSelected: controller.updateSelectedDate,
-                    ),
-                    AppTextField(
-                      controller: controller.notesController,
-                      hintText: "Notes...",
-                      labelText: "Notes",
-                      validator: controller.validateNotes,
-                      prefixIcon: Icon(Icons.note_outlined, size: 24),
-                      lines: 4,
-                    ),
-                    AppButton(
-                      title: controller.isEditing ? "Update" : "Submit",
-                      onTap: controller.submit,
+                    AppFormGroup(
+                      title: "Notes",
+                      children: [
+                        AppTextField(
+                          controller: controller.notesController,
+                          hintText: "Notes...",
+                          labelText: "Notes",
+                          validator: controller.validateNotes,
+                          prefixIcon: const Icon(Icons.note_outlined, size: 22),
+                          lines: 4,
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
             ).scrollPadding(),
+          ),
+          AppSubmitBar(
+            title: controller.isEditing ? "Update Trade" : "Save Trade",
+            onTap: controller.submit,
           ),
         ],
       ).screenPadding().screenBottomPadding(),
