@@ -1,7 +1,8 @@
 import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/router/routes.dart';
+import 'package:expense_tracker/core/widgets/application_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 
 import '../../core/extension/context_extension.dart';
 
@@ -27,7 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     );
 
     if (result) {
-      context.pushReplacement(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.login);
     }
   }
 
@@ -37,10 +38,12 @@ class _ProfileScreenState extends State<ProfileScreen>
 
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        elevation: 0,
-        title: const Text('Profile'),
-        centerTitle: true,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: ApplicationBar(
+          title: "Profile",
+          isShowBack: false,
+        ),
       ),
       body: Column(
         children: [
