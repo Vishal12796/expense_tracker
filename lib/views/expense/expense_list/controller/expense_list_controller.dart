@@ -6,47 +6,34 @@ class ExpenseListController extends GetxController {
   final selectedMonth = DateTime.now().obs;
 
   final expenses = <ExpenseModel>[
-    ExpenseModel(
-      id: '1',
-      amount: 250,
-      date: DateTime.now().subtract(const Duration(days: 1)),
-      name: 'Lunch',
-      description: 'Lunch with friends',
-      category: ExpenseCategory.food,
-    ),
-    ExpenseModel(
-      id: '2',
-      amount: 1200,
-      date: DateTime.now().subtract(const Duration(days: 2)),
-      name: 'Petrol Fill',
-      description: 'Bike petrol',
-      category: ExpenseCategory.petrol,
-    ),
-    ExpenseModel(
-      id: '3',
-      amount: 399,
-      date: DateTime.now().subtract(const Duration(days: 3)),
-      name: 'Mobile Recharge',
-      description: 'Jio prepaid plan',
-      category: ExpenseCategory.recharge,
-    ),
-    ExpenseModel(
-      id: '4',
-      amount: 15000,
-      date: DateTime.now().subtract(const Duration(days: 4)),
-      name: 'House Rent',
-      description: 'Monthly rent payment',
-      category: ExpenseCategory.rent,
-    ),
-    ExpenseModel(
-      id: '5',
-      amount: 2200,
-      date: DateTime.now().subtract(const Duration(days: 5)),
-      name: 'Clothes',
-      description: 'Bought shirts and jeans',
-      category: ExpenseCategory.shopping,
-    ),
+    // Helper to generate multiple expenses for a month
+    ..._generateMonthlyData(2026, 1, [200, 500, 150, 2000, 15000]),
+    ..._generateMonthlyData(2026, 2, [300, 100, 800, 400, 15000]),
+    ..._generateMonthlyData(2026, 3, [450, 200, 150, 600, 15000]),
+    ..._generateMonthlyData(2026, 4, [100, 900, 300, 200, 15000]),
+    ..._generateMonthlyData(2026, 5, [600, 300, 450, 800, 15000]),
+    ..._generateMonthlyData(2026, 6, [250, 700, 100, 400, 15000]),
+    ..._generateMonthlyData(2026, 7, [400, 150, 900, 200, 15000]),
+    ..._generateMonthlyData(2026, 8, [150, 600, 250, 500, 15000]),
+    ..._generateMonthlyData(2026, 9, [800, 200, 400, 300, 15000]),
+    ..._generateMonthlyData(2026, 10, [300, 450, 150, 700, 15000]),
+    ..._generateMonthlyData(2026, 11, [500, 100, 600, 250, 15000]),
+    ..._generateMonthlyData(2026, 12, [250, 1200, 399, 15000, 2200, 800]),
   ].obs;
+
+  static List<ExpenseModel> _generateMonthlyData(int year, int month, List<double> amounts) {
+    final categories = ExpenseCategory.values;
+    return List.generate(amounts.length, (index) {
+      return ExpenseModel(
+        id: '${year}_${month}_$index',
+        amount: amounts[index],
+        date: DateTime(year, month, (index * 5) + 1), // Spread across the month
+        name: 'Expense $index',
+        description: 'Mock description for month $month',
+        category: categories[index % categories.length],
+      );
+    });
+  }
 
   List<ExpenseModel> get monthlyExpenses {
     final month = selectedMonth.value;

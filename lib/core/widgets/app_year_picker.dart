@@ -8,12 +8,14 @@ class AppYearField extends StatefulWidget {
   final String hint;
   final MonthFiledVariant variant;
   final ValueChanged<DateTime>? onChanged;
+  final DateTime? initialDate;
 
   const AppYearField({
     super.key,
     this.hint = "Select Year",
     this.variant = MonthFiledVariant.big,
     this.onChanged,
+    this.initialDate,
   });
 
   @override
@@ -24,15 +26,39 @@ class _AppMonthYearFieldState extends State<AppYearField> {
   DateTime? selected;
   String selectedMonth = "";
 
+  @override
+  void initState() {
+    super.initState();
+    selected = widget.initialDate;
+    if (selected != null) {
+      selectedMonth = DateFormat('yyyy').format(selected!);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AppYearField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialDate != oldWidget.initialDate) {
+      setState(() {
+        selected = widget.initialDate;
+        if (selected != null) {
+          selectedMonth = DateFormat('yyyy').format(selected!);
+        } else {
+          selectedMonth = "";
+        }
+      });
+    }
+  }
+
   Future<void> onTap() async {
     final picked = await AppYearPicker.pick(context, initialDate: selected);
+
+    if (!mounted) return;
 
     if (picked != null) {
       setState(() {
         selected = picked;
-        selectedMonth = selected != null
-            ? DateFormat('MMM yyyy').format(selected!)
-            : widget.hint;
+        selectedMonth = DateFormat('yyyy').format(selected!);
       });
       widget.onChanged?.call(picked);
     }
@@ -123,23 +149,32 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
 
     final currentYear = DateTime.now().year;
 
-    // 👇 Disable future years
     final lastYear = widget.lastDate.year > currentYear
         ? currentYear
         : widget.lastDate.year;
 
     years = List.generate(
       lastYear - widget.firstDate.year + 1,
-          (index) => widget.firstDate.year + index,
+      (index) => widget.firstDate.year + index,
     );
 
-    /// 👇 Calculate scroll position
     final selectedIndex = years.indexOf(selectedYear);
-    final row = selectedIndex ~/ 4; // 4 columns
+    final row = selectedIndex < 0 ? 0 : selectedIndex ~/ 3;
 
-    _scrollController = ScrollController(
-      initialScrollOffset: row * 60.0, // approx row height
-    );
+    _scrollController = ScrollController(initialScrollOffset: row * 60.0);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _selectYear(int year) {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.pixels);
+    }
+    Navigator.pop(context, DateTime(year));
   }
 
   @override
@@ -152,7 +187,7 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
         width: double.maxFinite,
         height: 300,
         child: GridView.builder(
-          controller: _scrollController, // 👈 important
+          controller: _scrollController,
           itemCount: years.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
@@ -169,8 +204,8 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
               onTap: isFuture
                   ? null
                   : () {
-                Navigator.pop(context, DateTime(year));
-              },
+                      _selectYear(year);
+                    },
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(

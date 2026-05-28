@@ -178,3 +178,8 @@ flutter build ios
 - Put reusable app widgets in `lib/core/widgets/`.
 - Put route names in `routes.dart` and route registrations in `app_router.dart`.
 - Prefer existing project widgets and styles before adding new UI patterns.
+
+
+
+
+

@@ -38,12 +38,14 @@ class AppMonthYearField extends StatefulWidget {
   final String hint;
   final MonthFiledVariant variant;
   final ValueChanged<DateTime>? onChanged;
+  final DateTime? initialDate;
 
   const AppMonthYearField({
     super.key,
     this.hint = "Select Month",
     this.variant = MonthFiledVariant.big,
     this.onChanged,
+    this.initialDate,
   });
 
   @override
@@ -53,6 +55,30 @@ class AppMonthYearField extends StatefulWidget {
 class _AppMonthYearFieldState extends State<AppMonthYearField> {
   DateTime? selected;
   String selectedMonth = "";
+
+  @override
+  void initState() {
+    super.initState();
+    selected = widget.initialDate;
+    if (selected != null) {
+      selectedMonth = DateFormat('MMM yyyy').format(selected!);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant AppMonthYearField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialDate != oldWidget.initialDate) {
+      setState(() {
+        selected = widget.initialDate;
+        if (selected != null) {
+          selectedMonth = DateFormat('MMM yyyy').format(selected!);
+        } else {
+          selectedMonth = "";
+        }
+      });
+    }
+  }
 
   Future<void> onTap() async {
     final picked = await AppMonthYearPicker.pick(

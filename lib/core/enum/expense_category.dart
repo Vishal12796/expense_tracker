@@ -62,23 +62,23 @@ extension ExpenseCategoryX on ExpenseCategory {
   Color get color {
     switch (this) {
       case ExpenseCategory.food:
-        return Colors.orange;
+        return const Color(0xFFFF5722); // Vibrant Orange
       case ExpenseCategory.petrol:
-        return Colors.blue;
+        return const Color(0xFF2196F3); // Bright Blue
       case ExpenseCategory.recharge:
-        return Colors.purple;
+        return const Color(0xFF9C27B0); // Vibrant Purple
       case ExpenseCategory.rent:
-        return Colors.red;
+        return const Color(0xFFE91E63); // Bright Pink/Red
       case ExpenseCategory.shopping:
-        return Colors.pink;
+        return const Color(0xFF00BCD4); // Cyan
       case ExpenseCategory.movie:
-        return Colors.green;
+        return const Color(0xFF4CAF50); // Bright Green
       case ExpenseCategory.medicine:
-        return Colors.teal;
+        return const Color(0xFF009688); // Teal
       case ExpenseCategory.bills:
-        return Colors.indigo;
+        return const Color(0xFF3F51B5); // Indigo
       case ExpenseCategory.others:
-        return Colors.grey;
+        return const Color(0xFF607D8B); // Blue Grey
     }
   }
 

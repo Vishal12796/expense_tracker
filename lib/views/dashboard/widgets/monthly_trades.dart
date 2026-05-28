@@ -2,6 +2,7 @@ import 'package:expense_tracker/core/theme/spacing.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/extension/context_extension.dart';
+import '../../../core/extension/padding_extension.dart';
 import '../../../core/utils/utils.dart';
 
 class MonthlyTrades extends StatelessWidget {
@@ -62,6 +63,6 @@ class MonthlyTrades extends StatelessWidget {
           ),
         ],
       ),
-    );
+    ).screenPadding();
   }
 }
