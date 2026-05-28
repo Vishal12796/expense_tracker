@@ -9,9 +9,9 @@ class HomeBinding extends Bindings {
   @override
   void dependencies() {
     _lazyPutIfAbsent(() => HomeController());
-    _lazyPutIfAbsent(() => DashboardController());
     _lazyPutIfAbsent(() => TradeListController());
     _lazyPutIfAbsent(() => ExpenseListController());
+    _lazyPutIfAbsent(() => DashboardController());
     _lazyPutIfAbsent(() => ProfileController());
   }
 

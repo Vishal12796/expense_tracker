@@ -17,7 +17,8 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen>  with AutomaticKeepAliveClientMixin {
+class _DashboardScreenState extends State<DashboardScreen>
+    with AutomaticKeepAliveClientMixin {
   final DashboardController controller = Get.find<DashboardController>();
 
   @override
@@ -63,6 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen>  with AutomaticKeepAl
       body: DefaultTabController(
         length: 2,
         initialIndex: 1, // Default to Expenses tab to show the new analytics
+        animationDuration: Duration.zero,
         child: Column(
           spacing: 12,
           children: [
@@ -92,18 +94,21 @@ class _DashboardScreenState extends State<DashboardScreen>  with AutomaticKeepAl
               ),
             ),
 
-            Obx(() => AppYearField(
-              initialDate: DateTime(controller.selectedYear.value),
-              onChanged: (value) {
-                if (value != null) {
+            Obx(
+              () => AppYearField(
+                initialDate: DateTime(controller.selectedYear.value),
+                onChanged: (value) {
                   controller.updateYear(value);
-                }
-              },
-              variant: MonthFiledVariant.small,
-            )),
+                },
+                variant: MonthFiledVariant.small,
+              ),
+            ),
 
             const Expanded(
-              child: TabBarView(children: [MonthlyTrades(), ExpensesTab()]),
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                children: [MonthlyTrades(), ExpensesTab()],
+              ),
             ),
           ],
         ),

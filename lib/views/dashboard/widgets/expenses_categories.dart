@@ -33,9 +33,7 @@ class ExpensesCategories extends GetView<DashboardController> {
               AppMonthYearField(
                 initialDate: controller.selectedMonth,
                 onChanged: (value) {
-                  if (value != null) {
-                    controller.updateMonth(value);
-                  }
+                  controller.updateMonth(value);
                 },
                 variant: MonthFiledVariant.small,
               ),
@@ -59,7 +57,10 @@ class ExpensesCategories extends GetView<DashboardController> {
                 side: BorderSide(color: Colors.grey.withOpacity(0.1)),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 24,
+                  horizontal: 16,
+                ),
                 child: AppDonutChart(
                   totalAmount: controller.totalExpenses,
                   data: categories.map((cat) {

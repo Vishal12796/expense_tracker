@@ -1,5 +1,6 @@
 import 'package:expense_tracker/views/dashboard/controller/dashboard_controller.dart';
 import 'package:expense_tracker/views/expense/expense_list/controller/expense_list_controller.dart';
+import 'package:expense_tracker/views/investment/trade_list/controller/trade_list_controller.dart';
 import 'package:get/get.dart';
 
 class DashboardBinding extends Bindings {
@@ -7,6 +8,9 @@ class DashboardBinding extends Bindings {
   void dependencies() {
     if (!Get.isRegistered<ExpenseListController>()) {
       Get.lazyPut(() => ExpenseListController());
+    }
+    if (!Get.isRegistered<TradeListController>()) {
+      Get.lazyPut(() => TradeListController());
     }
     if (!Get.isRegistered<DashboardController>()) {
       Get.lazyPut(() => DashboardController());
