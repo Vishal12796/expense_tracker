@@ -2,7 +2,6 @@ import 'package:expense_tracker/views/expense/expense_list/controller/expense_li
 import 'package:expense_tracker/core/dialog/common_dialog.dart';
 import 'package:expense_tracker/core/extension/padding_extension.dart';
 import 'package:expense_tracker/core/router/routes.dart';
-import 'package:expense_tracker/core/theme/spacing.dart';
 import 'package:expense_tracker/core/utils/utils.dart';
 import 'package:expense_tracker/core/widgets/app_month_year_picker.dart';
 import 'package:expense_tracker/core/widgets/application_bar.dart';
@@ -25,26 +24,56 @@ class _ExpenseListScreenState extends State<ExpenseListScreen>
   @override
   bool get wantKeepAlive => true;
 
-  Widget header() {
-    return Row(
-      spacing: Spacing.sectionSpace,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AppMonthYearField(
-          onChanged: (value) {
-            controller.updateSelectedMonth(value);
-          },
-          variant: MonthFiledVariant.big,
+  Widget summaryCard() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [context.color.primary, context.color.primaryContainer],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-        Obx(
-          () => Text(
-            "${Utils.moneySymbol}${controller.monthlyTotalText}",
-            style: context.text.headlineLarge?.copyWith(
-              color: context.color.primary,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: context.color.primary.withValues(alpha: 0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Total Spent",
+                style: context.text.titleMedium?.copyWith(
+                  color: context.color.onPrimary.withValues(alpha: 0.8),
+                ),
+              ),
+              AppMonthYearField(
+                onChanged: (value) => controller.updateSelectedMonth(value),
+                variant: MonthFiledVariant.small,
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Obx(
+            () => Text(
+              "${Utils.moneySymbol}${controller.monthlyTotalText}",
+              style: context.text.headlineLarge?.copyWith(
+                color: context.color.onPrimary,
+                fontWeight: FontWeight.bold,
+                fontSize: 36,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -53,40 +82,50 @@ class _ExpenseListScreenState extends State<ExpenseListScreen>
     super.build(context);
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
-        child: ApplicationBar(title: "Monthly Expenses"),
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: const ApplicationBar(title: "Monthly Expenses"),
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: 'add_expense_fab',
-        onPressed: () => {Get.toNamed(AppRoutes.addExpense)},
-        child: Icon(Icons.add),
+        onPressed: () => Get.toNamed(AppRoutes.addExpense),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: const Icon(Icons.add),
       ),
       body: Column(
-        spacing: 12,
         children: [
-          const SizedBox(height: 8),
-          header(),
-          Flexible(
-            flex: 1,
+          const SizedBox(height: 16),
+          summaryCard().screenPadding(),
+          const SizedBox(height: 24),
+          Expanded(
             child: Obx(() {
               final expenses = controller.monthlyExpenses;
 
               if (expenses.isEmpty) {
                 return Center(
-                  child: Text(
-                    "No expenses found",
-                    style: context.text.titleMedium?.copyWith(
-                      color: context.color.secondary,
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.receipt_long_outlined,
+                        size: 64,
+                        color: context.color.outlineVariant,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        "No expenses found",
+                        style: context.text.titleMedium?.copyWith(
+                          color: context.color.secondary,
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }
 
               return ListView.separated(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 itemCount: expenses.length,
-                separatorBuilder: (context, index) {
-                  return const SizedBox(height: 4);
-                },
+                separatorBuilder: (context, index) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final expense = expenses[index];
 
@@ -97,22 +136,18 @@ class _ExpenseListScreenState extends State<ExpenseListScreen>
                       return await CommonDialog.showConfirmDialog(
                         context: context,
                         title: "Delete Expense",
-                        message:
-                            "Are you sure you want to delete this expense?",
+                        message: "Are you sure you want to delete this expense?",
                         confirmText: "Delete",
                       );
                     },
-                    background: Card.filled(
-                      elevation: 2,
-                      child: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: Colors.red,
-                        ),
-                        child: const Icon(Icons.delete, color: Colors.white),
+                    background: Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: context.color.error,
                       ),
+                      child: const Icon(Icons.delete_outline, color: Colors.white),
                     ),
                     onDismissed: (direction) {
                       controller.deleteExpense(expense.id);
@@ -129,7 +164,7 @@ class _ExpenseListScreenState extends State<ExpenseListScreen>
             }),
           ),
         ],
-      ).screenPadding(),
+      ),
     );
   }
 }

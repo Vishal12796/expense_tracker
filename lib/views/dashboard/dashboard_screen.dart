@@ -100,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 onChanged: (value) {
                   controller.updateYear(value);
                 },
-                variant: MonthFiledVariant.small,
+                variant: MonthFiledVariant.big,
               ),
             ),
 

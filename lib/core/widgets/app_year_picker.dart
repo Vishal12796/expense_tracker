@@ -9,6 +9,7 @@ class AppYearField extends StatefulWidget {
   final MonthFiledVariant variant;
   final ValueChanged<DateTime>? onChanged;
   final DateTime? initialDate;
+  final bool inverted;
 
   const AppYearField({
     super.key,
@@ -16,22 +17,23 @@ class AppYearField extends StatefulWidget {
     this.variant = MonthFiledVariant.big,
     this.onChanged,
     this.initialDate,
+    this.inverted = false,
   });
 
   @override
-  State<AppYearField> createState() => _AppMonthYearFieldState();
+  State<AppYearField> createState() => _AppYearFieldState();
 }
 
-class _AppMonthYearFieldState extends State<AppYearField> {
+class _AppYearFieldState extends State<AppYearField> {
   DateTime? selected;
-  String selectedMonth = "";
+  String selectedYearStr = "";
 
   @override
   void initState() {
     super.initState();
     selected = widget.initialDate;
     if (selected != null) {
-      selectedMonth = DateFormat('yyyy').format(selected!);
+      selectedYearStr = DateFormat('yyyy').format(selected!);
     }
   }
 
@@ -42,9 +44,9 @@ class _AppMonthYearFieldState extends State<AppYearField> {
       setState(() {
         selected = widget.initialDate;
         if (selected != null) {
-          selectedMonth = DateFormat('yyyy').format(selected!);
+          selectedYearStr = DateFormat('yyyy').format(selected!);
         } else {
-          selectedMonth = "";
+          selectedYearStr = "";
         }
       });
     }
@@ -58,7 +60,7 @@ class _AppMonthYearFieldState extends State<AppYearField> {
     if (picked != null) {
       setState(() {
         selected = picked;
-        selectedMonth = DateFormat('yyyy').format(selected!);
+        selectedYearStr = DateFormat('yyyy').format(selected!);
       });
       widget.onChanged?.call(picked);
     }
@@ -66,34 +68,48 @@ class _AppMonthYearFieldState extends State<AppYearField> {
 
   @override
   Widget build(BuildContext context) {
+    final Color contentColor = widget.inverted ? Colors.white : context.color.onSurface;
+    final Color iconColor = widget.inverted ? Colors.white : context.color.primary;
+    final Color bgColor = widget.inverted 
+        ? Colors.white.withValues(alpha: 0.2) 
+        : context.color.surfaceContainerHighest.withValues(alpha: 0.5);
+    final Color borderColor = widget.inverted 
+        ? Colors.white.withValues(alpha: 0.3) 
+        : context.color.outlineVariant;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: widget.variant.padding + 4,
-          vertical: widget.variant.padding,
+          vertical: widget.variant.padding - 2,
         ),
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(30),
-          border: Border.all(width: 0.5, color: Colors.grey.shade600),
+          color: bgColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(width: 1, color: borderColor),
         ),
         child: Row(
           spacing: 8,
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
-              Icons.calendar_month_outlined,
+              Icons.calendar_today_outlined,
               size: widget.variant.iconSize,
-              color: context.color.onPrimaryFixedVariant,
+              color: iconColor,
             ),
             Text(
-              selectedMonth.trim().isNotEmpty ? selectedMonth : widget.hint,
+              selectedYearStr.trim().isNotEmpty ? selectedYearStr : widget.hint,
               style: context.text.labelLarge?.copyWith(
-                color: context.color.onPrimaryFixedVariant,
+                color: contentColor,
                 fontWeight: FontWeight.w600,
                 fontSize: widget.variant.fontSize,
               ),
+            ),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: widget.variant.iconSize,
+              color: widget.inverted ? Colors.white70 : context.color.onSurfaceVariant,
             ),
           ],
         ),
@@ -109,13 +125,22 @@ class AppYearPicker {
     DateTime? firstDate,
     DateTime? lastDate,
   }) {
-    return showDialog<DateTime>(
+    return showGeneralDialog<DateTime>(
       context: context,
-      builder: (_) => _YearPickerDialog(
+      barrierDismissible: true,
+      barrierLabel: 'Dismiss',
+      transitionDuration: const Duration(milliseconds: 200),
+      pageBuilder: (context, anim1, anim2) => _YearPickerDialog(
         initialDate: initialDate ?? DateTime.now(),
         firstDate: firstDate ?? DateTime(2000),
         lastDate: lastDate ?? DateTime(2100),
       ),
+      transitionBuilder: (context, anim1, anim2, child) {
+        return ScaleTransition(
+          scale: CurvedAnimation(parent: anim1, curve: Curves.easeOutBack),
+          child: FadeTransition(opacity: anim1, child: child),
+        );
+      },
     );
   }
 }
@@ -138,17 +163,14 @@ class _YearPickerDialog extends StatefulWidget {
 class _YearPickerDialogState extends State<_YearPickerDialog> {
   late int selectedYear;
   late ScrollController _scrollController;
-
   late List<int> years;
 
   @override
   void initState() {
     super.initState();
-
     selectedYear = widget.initialDate.year;
 
     final currentYear = DateTime.now().year;
-
     final lastYear = widget.lastDate.year > currentYear
         ? currentYear
         : widget.lastDate.year;
@@ -156,12 +178,12 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
     years = List.generate(
       lastYear - widget.firstDate.year + 1,
       (index) => widget.firstDate.year + index,
-    );
+    ).reversed.toList();
 
     final selectedIndex = years.indexOf(selectedYear);
     final row = selectedIndex < 0 ? 0 : selectedIndex ~/ 3;
 
-    _scrollController = ScrollController(initialScrollOffset: row * 60.0);
+    _scrollController = ScrollController(initialScrollOffset: row * 50.0);
   }
 
   @override
@@ -170,64 +192,91 @@ class _YearPickerDialogState extends State<_YearPickerDialog> {
     super.dispose();
   }
 
-  void _selectYear(int year) {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.pixels);
-    }
-    Navigator.pop(context, DateTime(year));
-  }
-
   @override
   Widget build(BuildContext context) {
-    final currentYear = DateTime.now().year;
-
-    return AlertDialog(
-      title: const Text("Select Year"),
-      content: SizedBox(
-        width: double.maxFinite,
-        height: 300,
-        child: GridView.builder(
-          controller: _scrollController,
-          itemCount: years.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 10,
-            childAspectRatio: 2,
-          ),
-          itemBuilder: (context, index) {
-            final year = years[index];
-            final isSelected = year == selectedYear;
-            final isFuture = year > currentYear;
-
-            return GestureDetector(
-              onTap: isFuture
-                  ? null
-                  : () {
-                      _selectYear(year);
-                    },
-              child: Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.primary
-                      : Colors.grey.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Text(
-                  "$year",
-                  style: TextStyle(
-                    color: isFuture
-                        ? Colors.grey
-                        : isSelected
-                        ? Colors.white
-                        : Colors.black,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: context.color.surface,
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.1),
+              blurRadius: 20,
+              offset: const Offset(0, 10),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Select Year",
+              style: context.text.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-            );
-          },
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.maxFinite,
+              height: 300,
+              child: GridView.builder(
+                controller: _scrollController,
+                itemCount: years.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 2,
+                ),
+                itemBuilder: (context, index) {
+                  final year = years[index];
+                  final isSelected = year == selectedYear;
+
+                  return GestureDetector(
+                    onTap: () => Navigator.pop(context, DateTime(year)),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: isSelected
+                            ? context.color.primary
+                            : context.color.surfaceContainerHighest
+                                .withValues(alpha: 0.5),
+                        borderRadius: BorderRadius.circular(12),
+                        border: isSelected
+                            ? null
+                            : Border.all(color: context.color.outlineVariant),
+                      ),
+                      child: Text(
+                        "$year",
+                        style: context.text.labelMedium?.copyWith(
+                          color: isSelected
+                              ? context.color.onPrimary
+                              : context.color.onSurfaceVariant,
+                          fontWeight:
+                              isSelected ? FontWeight.bold : FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
